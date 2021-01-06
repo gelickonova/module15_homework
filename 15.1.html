@@ -1,0 +1,58 @@
+<!--Изобразить с помощью элементов SVG флаги пяти стран: Россия, Франция, Финляндия, Швейцария, Япония.-->
+
+<!--Каждый SVG-элемент с флагом должен иметь размер 180 на 120 пикселей.-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        div {
+            width: 180px;	height: 120px; /* Размеры */
+            /*background: #fc0; !* Цвет фона *!*/
+            outline: 2px solid #000; /* Чёрная рамка */
+            /*border: 3px solid #fff; !* Белая рамка *!*/
+            /*border-radius: 10px; !* Радиус скругления *!*/
+        }
+        body{
+            background-color: gray;
+        }
+    </style>
+</head>
+<body>
+<div id="russia">
+    <svg width="180" height="120">
+        <rect x="0" y="0" width="180" height="40" style="fill: #FFFFFF"/>
+        <rect x="0" y="40" width="180" height="40" style="fill: #0039A6"/>
+        <rect x="0" y="80" width="180" height="40" style="fill: #D52B1E"/>
+    </svg>
+</div>
+<div id="france">
+    <svg width="180" height="120">
+        <rect x="0" y="0" width="60" height="120" style="fill: #0055A4"/>
+        <rect x="60" y="0" width="60" height="120" style="fill: #FFFFFF"/>
+        <rect x="120" y="0" width="60" height="120" style="fill: #EF4135"/>
+    </svg>
+</div>
+<div id="finland">
+    <svg width="180" height="120">
+        <rect x="0" y="0" width="180" height="120" style="fill: #FFFFFF"/>
+        <rect x="50" y="0" width="30" height="120" style="fill: #0039A6"/>
+        <rect x="0" y="45" width="180" height="30" style="fill: #0039A6"/>
+    </svg>
+</div>
+<div id="switzerland">
+    <svg width="180" height="120">
+        <rect x="30" y="0" width="120" height="120" style="fill: #ff0000"/>
+        <rect x="78" y="20" width="24" height="80" style="fill: #FFFFFF"/>
+        <rect x="50" y="48" width="80" height="24" style="fill: #FFFFFF"/>
+    </svg>
+</div>
+<div id="japan">
+    <svg width="180" height="120">
+        <rect x="0" y="0" width="180" height="120" style="fill: #FFFFFF"/>
+        <circle cx="90" cy="60" r="30" style="fill: #bc002d"/>
+    </svg>
+</div>
+</body>
+</html>
