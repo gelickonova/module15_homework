@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const btn = document.getElementById('btn');
+            const timezone = document.getElementById('timezone')
+            const data_time = document.getElementById('data_time')
+
+            async function getData(position) {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+                let url = `https://api.ipgeolocation.io/timezone?apiKey=32bcd4a6e4b548968e7afcdb682ac679&lat=${lat}&long=${lon}`
+                let response = await fetch(url);
+                let jsonResponse = await response.json();
+                timezone.innerText = `Ваша временная зона: ${jsonResponse.timezone}`;
+                data_time.innerText = `Местные дата и время: ${jsonResponse.date_time_txt}`;
+            }
+
+            function getGeo() {
+                if ("geolocation" in navigator) {
+                    navigator.geolocation.getCurrentPosition(getData)
+                }
+                else alert('информация о местоположении недоступна')
+            }
+
+            btn.addEventListener('click', getGeo);
+        })
+    </script>
+</head>
+<body>
+<button id="btn">Нажми меня!</button>
+<div id="timezone"></div>
+<div id="data_time"></div>
+</body>
+</html>
