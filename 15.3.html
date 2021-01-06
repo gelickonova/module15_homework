@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const btn = document.getElementById('btn');
+            const screen = document.getElementById('screen')
+            const geo = document.getElementById('geo')
+            btn.addEventListener('click', () => {
+                const x = window.screen.width;
+                const y = window.screen.height;
+                screen.innerText = `Ваш размер экрана: ${x}x${y}`;
+                const geo_options = {
+                    enableHighAccuracy: true,
+                    maximumAge        : 30000,
+                    timeout           : 27000
+                };
+                if ("geolocation" in navigator) {
+                    navigator.geolocation.getCurrentPosition((position) => {
+                        const lat  = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        geo.innerText = `Ваше местоположение: ${lat} ${lon}`
+                    }, () => {geo.innerText = 'Информация о местоположении недоступна'}, geo_options);
+                }
+                else geo.innerText = 'Информация о местоположении недоступна'
+            });
+        })
+    </script>
+</head>
+<body>
+<button id="btn">Нажми меня!</button>
+<div id="screen"></div>
+<div id="geo"></div>
+</body>
+</html>
