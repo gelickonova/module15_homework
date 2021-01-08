@@ -1,0 +1,129 @@
+<!--Реализовать чат на основе эхо-сервера wss://echo.websocket.org/-->
+<!--Интерфейс состоит из input, куда вводится текст сообщения, и кнопки «Отправить».-->
+
+<!--При клике на кнопку «Отправить» сообщение должно появляться в окне переписки.-->
+
+<!--Эхо-сервер будет отвечать вам тем же сообщением, его также необходимо выводить в чат:-->
+<!--Добавить в чат механизм отправки гео-локации:-->
+<!--При клике на кнопку «Гео-локация» необходимо отправить данные серверу и в чат -->
+<!--вывести ссылку на https://www.openstreetmap.org/ с вашей гео-локацией. -->
+<!--Сообщение, которое отправит обратно эхо-сервер, не выводить.-->
+<!---->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const input = document.getElementById('input')
+            const btnSend = document.getElementById('send_btn');
+            const btnGeo = document.getElementById('geo_btn');
+            const div = document.getElementById('div');
+            const websocket = new WebSocket('wss://echo.websocket.org/');
+            let ignore;
+
+            websocket.onmessage = function (message) {
+                if (!ignore) {
+                    writeToScreen(message.data, true)
+                }
+            }
+
+            function getGeo(callback) {
+                if ("geolocation" in navigator) {
+                    navigator.geolocation.getCurrentPosition((position) => {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        callback(lat, lon);
+                    })
+                } else writeToScreen('геопозиция недоступна', false)
+            }
+
+            function writeToScreen(message, right) {
+                let pre = document.createElement("p");
+                pre.classList.add('border');
+                if (right) pre.classList.add('right');
+                pre.innerText = message;
+                div.appendChild(pre);
+                div.scrollTop = div.scrollHeight;
+            }
+
+            //отправить сообщение:
+            btnSend.addEventListener('click', () => {
+                ignore = false;
+                const message = input.value;
+                writeToScreen(message, false);
+                websocket.send(message);
+            });
+
+            //отправить геолокацию:
+            btnGeo.addEventListener('click', () => {
+                getGeo((lat, lon) => {
+                    const message = `https://www.openstreetmap.org/query?lat=${lat}&lon=${lon}`;
+                    writeToScreen(message, false);
+                    websocket.send(message);
+                    ignore = true;
+                });
+            });
+
+        })
+    </script>
+    <style>
+        .border {
+            border: 3px double #5baeff;
+            border-radius: 10px;
+        }
+
+        #div1 {
+            width: 600px;
+            height: 40px;
+            margin-bottom: 5px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: stretch;
+        }
+        #div {
+            width: 600px;
+            height: 600px;
+            background-color: #c8deff;
+            overflow-y: auto;
+        }
+
+        #input {
+            width: 50%;
+            background-color: #aae4ff;
+            flex-grow: 2;
+        }
+
+        .button {
+            width: 25%;
+            background-color: #75d3fc;
+            border: 3px double #3887c4;
+            flex-grow: 1;
+        }
+
+        p {
+            background-color: #9bcaff;
+            padding: 5px;
+            word-wrap: break-word;
+        }
+
+        p:not(.right) {
+            margin-left: 30%;
+        }
+
+        p.right {
+            margin-right: 30%;
+        }
+    </style>
+</head>
+<body>
+<div id="div1">
+    <input type="text" placeholder="Введите сообщение" class="border" id="input">
+    <button class="border button" id="send_btn">Отправить сообщение</button>
+    <button class="border button" id="geo_btn">Гео-позиция</button>
+</div>
+<div class="border" id="div"></div>
+</body>
+</html>
